@@ -1,10 +1,25 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import Layout from '../../components/layout/Layout';
 import { appointmentService } from '../../services/appointmentService';
 
 export default function DetallesCitasPage() {
     const navigate = useNavigate();
-    const citas = appointmentService.getAll();
+    const [citas, setCitas] = useState(appointmentService.getAll());
+
+    const handleNotImplemented = () => {
+        toast.error('Función no implementada aún', {
+            style: { border: '1px solid #d32f2f', padding: '16px', color: '#d32f2f' },
+            iconTheme: { primary: '#d32f2f', secondary: '#ffffff' },
+        });
+    };
+
+    const handleEliminar = (id) => {
+        appointmentService.deleteAppointment(id);
+        setCitas(appointmentService.getAll());
+        toast.success('Cita eliminada');
+    };
 
     return (
         <Layout>
@@ -29,13 +44,12 @@ export default function DetallesCitasPage() {
                         citas.map((cita) => (
                             <div key={cita.id} className="bg-white border border-outline-variant rounded-2xl p-6 shadow-sm border-l-[6px] border-l-primary flex flex-col md:flex-row justify-between items-center gap-6">
                                 <div className="flex items-center gap-6 w-full">
-                                    {/* SECCIÓN CORREGIDA: Mostramos la fecha real de la cita */}
                                     <div className="bg-primary-container/10 p-3 rounded-xl text-primary text-center min-w-[100px]">
                                         <p className="text-[10px] uppercase font-bold opacity-70">
-                                            {cita.date.split(' de ')[1]?.split(' ')[0]} {/* Mes */}
+                                            {cita.date?.split(' de ')[1]?.split(' ')[0] || ''}
                                         </p>
                                         <p className="text-xl font-black">
-                                            {cita.date.split(' de ')[0]} {/* Día */}
+                                            {cita.date?.split(' de ')[0] || ''}
                                         </p>
                                         <p className="text-xs font-bold">{cita.time}</p>
                                     </div>
@@ -52,11 +66,23 @@ export default function DetallesCitasPage() {
                                     </div>
                                 </div>
                                 <div className="flex gap-3 w-full md:w-auto">
-                                    <button className="flex-1 md:flex-none px-6 py-2 rounded-lg border border-outline-variant text-sm font-bold hover:bg-surface-container transition-all">
+                                    <button 
+                                        onClick={handleNotImplemented}
+                                        className="flex-1 md:flex-none px-6 py-2 rounded-lg border border-outline-variant text-sm font-bold hover:bg-surface-container transition-all"
+                                    >
                                         Reprogramar
                                     </button>
-                                    <button className="flex-1 md:flex-none px-6 py-2 rounded-lg bg-surface-container-highest text-on-surface text-sm font-bold hover:bg-outline-variant transition-all">
+                                    <button 
+                                        onClick={handleNotImplemented}
+                                        className="flex-1 md:flex-none px-6 py-2 rounded-lg bg-surface-container-highest text-on-surface text-sm font-bold hover:bg-outline-variant transition-all"
+                                    >
                                         Gestionar
+                                    </button>
+                                    <button 
+                                        onClick={() => handleEliminar(cita.id)}
+                                        className="flex-1 md:flex-none px-6 py-2 rounded-lg bg-red-50 text-red-600 text-sm font-bold hover:bg-red-100 transition-all"
+                                    >
+                                        Eliminar
                                     </button>
                                 </div>
                             </div>
