@@ -1,0 +1,1 @@
+export default function Badge() { return <span className='bg-gray-200 p-1'>Badge</span>; }

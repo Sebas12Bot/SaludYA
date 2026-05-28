@@ -1,0 +1,1 @@
+export default function SpecialtyCard() { return <div>Specialty Card</div>; }

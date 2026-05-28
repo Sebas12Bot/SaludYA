@@ -1,0 +1,1 @@
+export default function DoctorCard() { return <div>Doctor Card</div>; }
